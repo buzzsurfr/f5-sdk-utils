@@ -1,8 +1,8 @@
-## **python bigsuds - Reverse Lookup (Node -> Pool)** ##
+## **python f5-sdk - Reverse Lookup (Node -> Pool)** ##
 *(Also published on [DevCentral](https://devcentral.f5.com/codeshare/python-f5-sdk-reverse-lookup-node-gt-pool))*
 ### **Problem this snippet solves:** ###
 
-> This python bigsuds script prints the list of pools using a specific node.
+> This python f5-sdk script prints the list of pools using a specific node.
 
 ### **How to use this snippet:** ###
     rlookup-node.py <hostname> <username> <nodename>

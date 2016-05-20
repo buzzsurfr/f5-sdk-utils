@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 __author__ = 'buzzsurfr'
-__version__ = '0.1'
+__version__ = '0.2'
 
 #  Standard Library
 import sys
@@ -11,7 +11,7 @@ import re
 import getpass
 
 #  Local Application/Library Specific
-import bigsuds
+from f5.bigip import ManagementRoot
 
 if len(sys.argv) < 4:
 	print "\n\n\tUsage: %s host user pool" % sys.argv[0]
@@ -21,18 +21,18 @@ if len(sys.argv) < 4:
 userpass = getpass.getpass()
 
 #  Connect to BIG-IP
-b = bigsuds.BIGIP(sys.argv[1], sys.argv[2], userpass)
+mgmt = ManagementRoot(sys.argv[1], sys.argv[2], userpass)
 
+#  Pool to search for
 pool = sys.argv[3]
 if len(pool) < 8 or pool[:8] != '/Common/':
 	pool = '/Common/'+pool
 print "Virtual Servers using Pool "+pool
 
-#  Get list of pools and pool members
-virtual_servers = b.LocalLB.VirtualServer.get_list()
-vs_pools = b.LocalLB.VirtualServer.get_default_pool_name(virtual_servers)
+#  Get list of virtual servers
+virtual_servers = mgmt.tm.ltm.virtuals.get_collection()
 
 #  Iterate through pool member list (has a list of members per pool referenced) looking for node
-for i, vs_pool in enumerate(vs_pools):
-    if pool == vs_pool:
-      print "\t"+virtual_servers[i]
+for vs in virtual_servers:
+	if pool == vs.pool:
+		print "\t"+vs.name
